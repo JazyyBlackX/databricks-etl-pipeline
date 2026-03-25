@@ -1,0 +1,37 @@
+{
+  "storage": {
+    "raw_path": "dbfs:/mnt/raw",
+    "bronze_path": "dbfs:/mnt/bronze",
+    "silver_path": "dbfs:/mnt/silver",
+    "gold_path": "dbfs:/mnt/gold"
+  },
+  "ingestion": {
+    "source_format": "csv",
+    "source_file": "sample_data.csv",
+    "header": true,
+    "infer_schema": true,
+    "write_mode": "overwrite"
+  },
+  "transformation": {
+    "timestamp_column": "timestamp",
+    "date_column": "date",
+    "partition_by": "date",
+    "dedup_key": "user_id",
+    "dedup_order_col": "timestamp"
+  },
+  "gold": {
+    "group_by": "category",
+    "agg_column": "amount",
+    "write_mode": "overwrite"
+  },
+  "data_quality": {
+    "amount_min": 0,
+    "amount_max": 100000,
+    "critical_columns": ["user_id", "timestamp", "amount", "category"]
+  },
+  "spark": {
+    "app_name": "DatabricksETLPipeline",
+    "shuffle_partitions": "200",
+    "adaptive_enabled": "true"
+  }
+}
